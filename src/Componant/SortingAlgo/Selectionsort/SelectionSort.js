@@ -1,9 +1,7 @@
-import { hasSelectionSupport } from '@testing-library/user-event/dist/utils';
-import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
-import './BubbleSort.css';
+import React, { useState } from 'react';
 
-const BubbleSort = () => {
+const SelectionSort = () => {
     const [value, setValue] = useState([]);
     const [random, setRandom] = useState([]);
     const [sorted, setSorted] = useState([]);
@@ -22,38 +20,48 @@ const BubbleSort = () => {
         setSorted(myArray);
     };
 
-    const bubbleSort = async (arr) => {
+    const selectionSort = async (arr) => {
+        //  console.log(arr.length);
         for (let i = 0; i < arr.length; i++) {
-            for (let j = 0; j < arr.length; j++) {
-                if (arr[j] > arr[j + 1]) {
-                    let temp = arr[j];
-                    arr[j] = arr[j + 1];
-                    arr[j + 1] = temp;
-                }
-                await sleep(0);
-            }
+            let min = i;
 
-            // console.log('arr=', arr);
+            for (let j = i + 1; j < arr.length; j++) {
+                if (arr[j] < arr[min]) {
+                    min = j;
+                }
+            }
+            if (min !== i) {
+                // swap(arr[min],arr[i])
+                let temp = arr[i];
+                arr[i] = arr[min];
+                arr[min] = temp;
+            }
             setValue(arr[i]);
             console.log('Val=', value);
+            await sleep(100);
         }
+        // for (let i = 0; i < arr.length; i++) {
+        //     console.log(arr[i]);
+        // }
     };
+
     function sleep(ms) {
         return new Promise((resolve) => setTimeout(resolve, ms));
     }
-
     const sort = (e) => {
         e.preventDefault();
 
-        bubbleSort(random);
+        selectionSort(random);
         console.log('sortfunction');
     };
+    // let arr1 = [5, 7, 2, 3, 1, 0];
+    // selectionSort(arr1);
 
     return (
         <>
             <Button onClick={generateArray}>Random</Button>
             <Button className="btn-dark ms-5" onClick={sort}>
-                Bubble Sort
+                Selection Sort
             </Button>
 
             <div className="array-container">
@@ -69,21 +77,8 @@ const BubbleSort = () => {
                     ))}
                 </div>
             </div>
-            {/* <div className="array-container">
-                <div>
-                    {value.map((val, indx) => (
-                        <div
-                            className="array-bar-rval"
-                            key={indx}
-                            style={{ height: `${val}vh` }}
-                        >
-                            {val}
-                        </div>
-                    ))}
-                </div>
-            </div> */}
         </>
     );
 };
 
-export default BubbleSort;
+export default SelectionSort;
